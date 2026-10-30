@@ -1,18 +1,13 @@
-# save this file at the root of the GymBro repo
+# TEST build - no Apple account needed. Upload to repo root as codemagic.yaml
+# (rename the real one first), run the test, then restore the real yaml.
 workflows:
-  gymbro-ios:
-    name: GymBro iOS Build
+  gymbro-test:
+    name: GymBro iOS Test Build (no signing)
     max_build_duration: 60
     instance_type: mac_mini_m2
     environment:
       node: 20
       xcode: latest
-      groups:
-        - appstore_credentials
-      vars:
-        BUNDLE_ID: com.imagineadvertising.igymbro
-    integrations:
-      app_store_connect: GymBro_API_key
     scripts:
       - name: Install dependencies
         script: npm install
@@ -21,15 +16,6 @@ workflows:
           npm run build || npx vite build
           npx cap add ios
           npx cap sync ios
-      - name: Set up code signing
+      - name: Archive iOS project (unsigned)
         script: |
-          app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
-          xcode-project use-profiles
-      - name: Build IPA
-        script: xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App
-    publishing:
-      app_store_connect:
-        auth: integration
-        submit_to_testflight: true
-        beta_groups:
-          - Internal Testers
+          xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App --no-codesign || xcodebuild -workspace ios/App/App.xcworkspace -scheme App -configuration Release -sdk iphoneos -derivedDataPath build CODE_SIGNING_ALLOWED=NO
