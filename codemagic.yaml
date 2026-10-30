@@ -11,6 +11,8 @@ workflows:
         - appstore_credentials
       vars:
         BUNDLE_ID: com.imagineadvertising.igymbro
+    integrations:
+      app_store_connect: GymBro_API_key
     scripts:
       - name: Install dependencies
         script: npm install
