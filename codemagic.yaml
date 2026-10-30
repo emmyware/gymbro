@@ -10,7 +10,7 @@ workflows:
       xcode: latest
     scripts:
       - name: Install dependencies
-        script: npm install
+        script: npm install --legacy-peer-deps
       - name: Build web app and sync Capacitor iOS project
         script: |
           npm run build || npx vite build
