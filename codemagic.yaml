@@ -1,0 +1,33 @@
+# save this file at the root of the GymBro repo
+workflows:
+  gymbro-ios:
+    name: GymBro iOS Build
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      node: 20
+      xcode: latest
+      groups:
+        - appstore_credentials
+      vars:
+        BUNDLE_ID: com.imagineadvertising.igymbro
+    scripts:
+      - name: Install dependencies
+        script: npm install
+      - name: Build web app and sync Capacitor iOS project
+        script: |
+          npm run build || npx vite build
+          npx cap add ios
+          npx cap sync ios
+      - name: Set up code signing
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
+          xcode-project use-profiles
+      - name: Build IPA
+        script: xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        beta_groups:
+          - Internal Testers
