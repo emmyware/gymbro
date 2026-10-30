@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GymBro — Privacy Policy</title>
+<style>
+  :root{--bg:#0a0a0a;--card:#151515;--border:#2a2a2a;--text:#f0f0f0;--muted:#999;--gold:#f5a623;--red:#e8453c;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:Arial,sans-serif;line-height:1.65;}
+  .wrap{max-width:680px;margin:0 auto;padding:32px 20px 80px;}
+  .logo{font-weight:800;font-size:1.4rem;margin-bottom:4px;}
+  .logo .g{color:var(--red);} .logo .b{color:var(--gold);}
+  .updated{color:var(--muted);font-size:.8rem;margin-bottom:32px;}
+  h1{font-size:1.6rem;margin-bottom:8px;}
+  h2{font-size:1.1rem;color:var(--gold);margin:32px 0 10px;}
+  p, li{color:#ddd;font-size:.92rem;margin-bottom:10px;}
+  ul{padding-left:20px;margin-bottom:14px;}
+  .highlight{background:#111;border:1px solid #333;border-radius:2px;padding:20px 16px 14px;margin:20px 0;position:relative;}
+  .highlight::before{content:'KEY POINT';position:absolute;top:-9px;left:14px;background:var(--bg);padding:0 8px;font-size:.62rem;letter-spacing:.12em;color:var(--gold);font-weight:bold;}
+  .back{display:inline-block;margin-bottom:24px;color:var(--muted);text-decoration:none;font-size:.85rem;}
+  a{color:var(--gold);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="javascript:history.back()">&larr; Back</a>
+  <div class="logo"><span class="g">GYM</span><span class="b">BRO</span></div>
+  <h1>Privacy Policy</h1>
+  <div class="updated">Last updated: September 2026</div>
+
+  <p>GymBro ("we", "us", "our") is an AI fitness coaching app. This page explains what information we collect, how we use it, and — since people regularly ask — exactly what happens with your camera, your location, and your health data.</p>
+
+  <div class="highlight">
+    <strong>The short version on your camera:</strong> GymBro uses your device's camera to detect your body's pose and count reps in real time, entirely on your own device. We do not record, store, transmit, or have any access to your camera footage. Video frames are processed locally and immediately discarded — they never reach our servers.
+  </div>
+
+  <div class="highlight">
+    <strong>The short version on location:</strong> GymBro only accesses your precise location while you're actively doing a GPS-based activity (running, walking, cycling, hiking). It's used to draw your route and calculate distance, pace, and splits. It is never collected in the background outside of an active tracked session unless you've separately granted background location access, and it's never sold or shared with advertisers.
+  </div>
+
+  <h2>What we collect</h2>
+  <ul>
+    <li><strong>Account information:</strong> your name, email address, and password (handled securely via our authentication provider).</li>
+    <li><strong>Fitness data you choose to enter:</strong> age, weight, height, fitness goals, and workout history (rep counts, streaks, exercise selection, food logs).</li>
+    <li><strong>Location data during GPS activities:</strong> when you start a GPS-based activity (running, walking, cycling, hiking), we collect your device's precise location for the duration of that session to draw your route on a map and calculate distance, pace, and per-kilometer splits. This data is stored with that workout so you can view it later in your history. If you grant background location permission, tracking continues if your screen locks or you switch apps — you can revoke this at any time in your device's Settings, and it only ever applies while a tracked activity is actively running, never passively in the background at other times.</li>
+    <li><strong>Heart rate data (optional, via Health Connect):</strong> if you have a smartwatch or fitness band that writes heart rate data to Android's Health Connect, and you've granted GymBro permission to read it, we pull heart rate readings during your GPS activities to show live BPM and a post-workout heart rate chart. GymBro has no heart rate sensor of its own and cannot read this data without both a paired wearable and your explicit permission grant. You can revoke this permission at any time in Health Connect's own settings or your device's app permissions.</li>
+    <li><strong>Subscription &amp; payment status:</strong> we know whether you're on a free trial or a paid Pro subscription, and your subscription expiry date. On Android, subscriptions are purchased through Google Play Billing — Google acts as the merchant and we never see your card details. On other platforms, payments are processed by Flutterwave. Either way, GymBro never sees or stores your card information directly.</li>
+    <li><strong>Profile photo (optional):</strong> if you choose to upload a profile picture, it's stored securely and is visible within your own account, and to other members of any group you belong to. You can change or remove it at any time.</li>
+    <li><strong>Group data (if you join or create a group):</strong> the groups you're a member of, and — only if you explicitly turn them on — your workout summaries and/or live location during outdoor activities may become visible to other members of that specific group. Both are off by default and controlled per-group; see the "Groups" section below.</li>
+    <li><strong>Referral information:</strong> if you refer a friend or are referred by one, we track that relationship and any referral earnings.</li>
+  </ul>
+
+  <h2>What we never collect</h2>
+  <ul>
+    <li>Camera video or images. Pose detection runs locally on your device using on-device processing (MediaPipe) — no video frame is ever uploaded.</li>
+    <li>Voice recordings (our AI coach speaks to you; it does not listen to or record you).</li>
+    <li>Your location outside of an actively tracked GPS activity, or background location without your explicit, separate permission grant.</li>
+    <li>Heart rate or other health data, unless you've paired a wearable with Health Connect and explicitly granted GymBro permission to read it.</li>
+  </ul>
+
+  <h2>Location &amp; GPS tracking</h2>
+  <p>When you start a GPS-based activity, GymBro records your position periodically to build a route, calculate distance and pace, and generate per-kilometer splits after your session. This data is attached to that specific workout and stored with your history, the same way rep counts are.</p>
+  <p>If you turn on <strong>live location sharing</strong> for a group you belong to, your position updates roughly every 15 seconds and is visible to other members of that specific group for as long as your session is active — displayed as a colored dot on their map alongside their own position. This is off by default, controlled per-group, and stops immediately when you end the session or turn the toggle off. Members you haven't shared with, and people outside that group, never see this.</p>
+
+  <h2>Health &amp; heart rate data</h2>
+  <p>GymBro can optionally read heart rate data from Android Health Connect during a GPS activity, if — and only if — you have a paired smartwatch or fitness band whose own app is already writing heart rate into Health Connect, and you've granted GymBro permission to read it. GymBro has no way to measure heart rate on its own. This data is used only to show a live BPM reading during your workout and an average/max heart rate chart afterward. GymBro does not write data back into Health Connect beyond what's needed for this feature, and does not share this data with anyone else, including other group members.</p>
+
+  <h2>Groups</h2>
+  <p>Groups are optional. If you create or join one, other members can see the group's name and membership list. Two additional things are opt-in and controlled per-group, both off by default:</p>
+  <ul>
+    <li><strong>Share workout data</strong> — lets members of that specific group see your completed sessions and stats.</li>
+    <li><strong>Share live location</strong> — lets members of that specific group see your live position on a map only while you're actively doing a GPS workout (see "Location &amp; GPS tracking" above).</li>
+  </ul>
+  <p>You can turn either off at any time from the group's page, and doing so stops future sharing immediately.</p>
+
+  <h2>How we use your data</h2>
+  <ul>
+    <li>To operate your account and sync your workout progress across devices.</li>
+    <li>To draw your route and calculate distance, pace, and splits after a GPS activity.</li>
+    <li>To display heart rate data during and after a workout, if you've connected a wearable via Health Connect.</li>
+    <li>To power group features you've explicitly opted into.</li>
+    <li>To process subscription payments through Google Play Billing (Android) or Flutterwave (other platforms).</li>
+    <li>To credit referral earnings when someone you refer subscribes.</li>
+    <li>To send you notifications you've opted into (streak reminders, offers).</li>
+  </ul>
+  <p>We do not sell your personal data to third parties.</p>
+
+  <h2>Who we share data with</h2>
+  <ul>
+    <li><strong>Supabase</strong> — our database provider, which securely stores your account, fitness, location, and group data.</li>
+    <li><strong>Google Play</strong> — for Android subscription purchases, Google acts as the payment processor and merchant of record; Google's own privacy policy applies to that transaction. GymBro receives confirmation that a purchase is valid, not your payment details.</li>
+    <li><strong>Flutterwave</strong> — our payment processor for non-Android subscriptions, which handles those payments directly.</li>
+    <li><strong>Android Health Connect</strong> — this is a data source on your own device, not a third party we send data to. Heart rate data flows from Health Connect into GymBro, one direction, only with your permission.</li>
+    <li><strong>Groq</strong> — powers our AI coach's text responses. Messages you send to the AI coach are processed to generate a reply, but are not used to identify you personally beyond that conversation.</li>
+    <li><strong>Other members of a group you belong to</strong> — only whatever you've explicitly opted to share with that specific group (workout data and/or live location), and only for as long as you keep that sharing turned on.</li>
+  </ul>
+
+  <h2>Your rights</h2>
+  <p>You can request a copy of your data, ask us to correct it, or request deletion of your account and associated data at any time by contacting us. If you're in a region covered by GDPR or NDPR (Nigeria's data protection law), you have the right to access, correct, or delete your personal data, and to withdraw consent at any time.</p>
+
+  <h2>Data retention</h2>
+  <p>We retain your account data — including workout history, GPS routes, and heart rate data where applicable — for as long as your account is active. Live location shared with a group is not retained beyond your active session; it reflects your current position only and is not kept as a historical log of everywhere you've been. If you delete your account, your personal data is removed from our active systems, though some records may be retained where required for legal, accounting, or fraud-prevention purposes.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>We may update this policy as GymBro evolves. We'll update the date at the top of this page when changes are made.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about your data or this policy? Email us at <a href="mailto:igymbrosupport@gmail.com">igymbrosupport@gmail.com</a>, or use Contact Support inside the app (Settings → Support).</p>
+</div>
+</body>
+</html>

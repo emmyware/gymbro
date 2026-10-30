@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GymBro — Registrants</title>
+<meta name="robots" content="noindex, nofollow"/>
+<style>
+  :root{--bg:#0a0a0a;--card:#151515;--panel:#1a1a1a;--border:#2a2a2a;--text:#f0f0f0;--muted:#888;--gold:#f5a623;--red:#e8453c;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',Arial,sans-serif;min-height:100vh;}
+  .wrap{max-width:760px;margin:0 auto;padding:28px 18px 60px;}
+  .logo{font-family:Georgia,serif;font-weight:800;font-size:1.5rem;letter-spacing:-0.02em;margin-bottom:6px;}
+  .logo .g{color:var(--red);} .logo .b{color:var(--gold);}
+  .sub{color:var(--muted);font-size:.82rem;margin-bottom:28px;}
+
+  .gate{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;max-width:360px;margin:60px auto;text-align:center;}
+  .gate input{width:100%;background:var(--panel);border:1px solid var(--border);color:var(--text);padding:12px 14px;border-radius:8px;font-size:1rem;margin:14px 0;outline:none;text-align:center;letter-spacing:.1em;}
+  .gate input:focus{border-color:var(--gold);}
+  .gate button{width:100%;padding:12px;background:linear-gradient(135deg,var(--red),var(--gold));color:#000;border:none;border-radius:8px;font-weight:700;font-size:.95rem;cursor:pointer;}
+  .gate-err{color:var(--red);font-size:.78rem;margin-top:10px;min-height:1em;}
+
+  .stats{display:flex;gap:10px;margin-bottom:22px;}
+  .stat{flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;}
+  .stat-val{font-size:1.5rem;font-weight:700;}
+  .stat-label{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:2px;}
+
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;font-size:.85rem;}
+  th{text-align:left;padding:12px 14px;background:var(--panel);color:var(--muted);font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border);}
+  td{padding:12px 14px;border-bottom:1px solid var(--border);}
+  tr:last-child td{border-bottom:none;}
+  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:.68rem;font-weight:600;}
+  .badge-active{background:rgba(60,200,120,.15);color:#3cc878;}
+  .badge-trial{background:rgba(245,166,35,.15);color:var(--gold);}
+  .badge-expired,.badge-cancelled{background:rgba(232,69,60,.15);color:var(--red);}
+  .empty{text-align:center;color:var(--muted);padding:40px 0;font-size:.85rem;}
+  .loading{text-align:center;color:var(--muted);padding:40px 0;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div id="gateScreen" class="gate">
+    <div class="logo"><span class="g">GYM</span><span class="b">BRO</span> — PR Access</div>
+    <input id="prCode" type="password" placeholder="Access code" autocomplete="off"/>
+    <button onclick="loadData()">View Registrants</button>
+    <div class="gate-err" id="gateErr"></div>
+  </div>
+
+  <div id="dataScreen" style="display:none">
+    <div class="logo"><span class="g">GYM</span><span class="b">BRO</span> — Registrants</div>
+    <div class="sub">Read-only view. Names, signup date, subscription status, referral count.</div>
+    <div style="font-size:.72rem;color:var(--muted);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center">
+      <span id="lastRefreshed">Loading...</span>
+      <button onclick="refreshData()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:6px;font-size:.7rem;cursor:pointer">↻ Refresh</button>
+    </div>
+    <div class="stats" id="statsRow"></div>
+    <div id="tableHolder"><div class="loading">Loading…</div></div>
+  </div>
+
+</div>
+
+<script>
+function statusBadge(s) {
+  s = s || 'trial';
+  return '<span class="badge badge-' + s + '">' + s + '</span>';
+}
+
+async function loadData() {
+  var code = document.getElementById('prCode').value.trim();
+  var errEl = document.getElementById('gateErr');
+  if (!code) { errEl.textContent = 'Enter the access code.'; return; }
+  errEl.textContent = '';
+
+  try {
+    var res = await fetch('/api/pr-data?code=' + encodeURIComponent(code));
+    var json = await res.json();
+    if (!res.ok) {
+      errEl.textContent = json.error || 'Access denied.';
+      return;
+    }
+    sessionStorage.setItem('pr_code', code);
+    renderData(json);
+  } catch (e) {
+    errEl.textContent = 'Could not load data. Try again.';
+  }
+}
+
+function renderData(rows) {
+  document.getElementById('gateScreen').style.display = 'none';
+  document.getElementById('dataScreen').style.display = 'block';
+
+  var total = rows.length;
+  var active = rows.filter(function(r){ return r.subscription_status === 'active'; }).length;
+  var totalReferrals = rows.reduce(function(a,r){ return a + (r.referral_count || 0); }, 0);
+  var now = new Date().toLocaleString();
+
+  document.getElementById('statsRow').innerHTML =
+    '<div class="stat"><div class="stat-val">' + total + '</div><div class="stat-label">Total Users</div></div>' +
+    '<div class="stat"><div class="stat-val">' + active + '</div><div class="stat-label">Pro Active</div></div>' +
+    '<div class="stat"><div class="stat-val">' + totalReferrals + '</div><div class="stat-label">Referrals</div></div>';
+
+  document.getElementById('lastRefreshed').textContent = 'Last refreshed: ' + now + ' · ' + total + ' rows loaded';
+
+  var holder = document.getElementById('tableHolder');
+  if (!rows.length) {
+    holder.innerHTML = '<div class="empty">No registrants yet.</div>';
+    return;
+  }
+
+  var html = '<table><tr><th>Name</th><th>Signed Up</th><th>Status</th><th>Referrals</th></tr>';
+  rows.forEach(function(r) {
+    var d = r.join_date ? new Date(r.join_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
+    html += '<tr><td>' + (r.name || 'Unnamed') + '</td><td>' + d + '</td><td>' + statusBadge(r.subscription_status) + '</td><td>' + (r.referral_count || 0) + '</td></tr>';
+  });
+  html += '</table>';
+  holder.innerHTML = html;
+}
+
+// Auto-load if code already verified this session
+(function(){
+  var saved = sessionStorage.getItem('pr_code');
+  if (saved) {
+    document.getElementById('prCode').value = saved;
+    loadData();
+  }
+})();
+
+function refreshData() {
+  var code = sessionStorage.getItem('pr_code');
+  if (!code) return;
+  document.getElementById('lastRefreshed').textContent = 'Refreshing...';
+  document.getElementById('tableHolder').innerHTML = '<div class="loading">Loading…</div>';
+  fetch('/api/pr-data?code=' + encodeURIComponent(code) + '&t=' + Date.now())
+    .then(function(r){ return r.json(); })
+    .then(function(json){ renderData(json); })
+    .catch(function(){ document.getElementById('lastRefreshed').textContent = 'Refresh failed.'; });
+}
+</script>
+
+</body>
+</html>

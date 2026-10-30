@@ -1,0 +1,19 @@
+{
+  "name": "gymbro",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@capacitor/android": "^8.5.0",
+    "@capacitor/app": "^8.1.1",
+    "@capacitor/cli": "^8.5.0",
+    "@capacitor/core": "^8.5.0",
+    "@capacitor/geolocation": "^8.2.1",
+    "@capacitor/local-notifications": "^8.2.1",
+    "@capacitor/motion": "^8.0.1",
+    "capacitor-health-connect": "^0.7.0",
+    "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5"
+  }
+}

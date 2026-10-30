@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GymBro Broadcast</title>
+<style>
+  :root{--bg:#0F0F12;--surface:#1A1A22;--text:#FFFFFF;--muted:#8E8E9F;--accent:#CCFF00;--border:#2C2C35;}
+  *{box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',-apple-system,sans-serif;margin:0;padding:24px;max-width:480px;margin:0 auto;}
+  h1{font-family:'Oswald',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:-0.02em;font-size:1.6rem;margin-bottom:4px;}
+  .sub{color:var(--muted);font-size:.85rem;margin-bottom:24px;}
+  label{display:block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px;margin-top:16px;}
+  input,textarea{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:12px 14px;border-radius:6px;font-size:.95rem;font-family:inherit;}
+  textarea{resize:vertical;min-height:80px;}
+  button{width:100%;margin-top:20px;padding:14px;background:var(--accent);color:#000;border:none;border-radius:6px;font-family:'Oswald',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.04em;font-size:1rem;cursor:pointer;}
+  button:disabled{opacity:.5;cursor:not-allowed;}
+  #status{margin-top:16px;font-size:.85rem;padding:12px;border-radius:6px;display:none;}
+  #status.ok{background:rgba(204,255,0,.1);color:var(--accent);border:1px solid var(--accent);display:block;}
+  #status.err{background:rgba(255,59,48,.1);color:#ff6b5e;border:1px solid #ff6b5e;display:block;}
+</style>
+</head>
+<body>
+  <h1>GymBro Broadcast</h1>
+  <div class="sub">Send a push notification to every subscribed user. No redeploy needed.</div>
+
+  <label for="adminKey">Admin Key</label>
+  <input type="password" id="adminKey" placeholder="Your broadcast admin key" autocomplete="off"/>
+
+  <label for="title">Title</label>
+  <input type="text" id="title" placeholder="e.g. New leg day routine added 🦵" maxlength="60"/>
+
+  <label for="message">Message</label>
+  <textarea id="message" placeholder="e.g. We just added 3 new exercises to your plan. Check them out!" maxlength="180"></textarea>
+
+  <label for="url">Link when tapped (optional)</label>
+  <input type="text" id="url" placeholder="/ (defaults to home)"/>
+
+  <button id="sendBtn" onclick="sendBroadcast()">Send Notification</button>
+
+  <div id="status"></div>
+
+<script>
+async function sendBroadcast() {
+  var btn = document.getElementById('sendBtn');
+  var statusEl = document.getElementById('status');
+  var adminKey = document.getElementById('adminKey').value.trim();
+  var title = document.getElementById('title').value.trim();
+  var message = document.getElementById('message').value.trim();
+  var url = document.getElementById('url').value.trim() || '/';
+
+  statusEl.className = '';
+  statusEl.textContent = '';
+
+  if (!title || !message) {
+    statusEl.className = 'err';
+    statusEl.textContent = 'Title and message are both required.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  try {
+    var res = await fetch('/api/send-push', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: title, message: message, url: url, adminKey: adminKey })
+    });
+    var data = await res.json();
+
+    if (res.ok) {
+      statusEl.className = 'ok';
+      statusEl.textContent = 'Sent to ' + data.sent + ' of ' + data.total + ' subscribers.';
+      document.getElementById('title').value = '';
+      document.getElementById('message').value = '';
+    } else {
+      statusEl.className = 'err';
+      statusEl.textContent = data.error || 'Failed to send.';
+    }
+  } catch(e) {
+    statusEl.className = 'err';
+    statusEl.textContent = 'Network error: ' + e.message;
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Send Notification';
+}
+</script>
+</body>
+</html>

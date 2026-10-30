@@ -1,0 +1,81 @@
+# GymBro Netlify config
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/flw-webhook"
+  to = "/.netlify/functions/flw-webhook"
+  status = 200
+
+[[redirects]]
+  from = "/api/gemini"
+  to = "/.netlify/functions/gemini"
+  status = 200
+
+[[redirects]]
+  from = "/api/tts"
+  to = "/.netlify/functions/tts"
+  status = 200
+
+[[redirects]]
+  from = "/api/send-push"
+  to = "/.netlify/functions/send-push"
+  status = 200
+
+[[redirects]]
+  from = "/api/save-push-subscription"
+  to = "/.netlify/functions/save-push-subscription"
+  status = 200
+
+[[redirects]]
+  from = "/api/pr-data"
+  to = "/.netlify/functions/pr-data"
+  status = 200
+
+[[redirects]]
+  from = "/pr"
+  to = "/pr.html"
+  status = 200
+
+[[redirects]]
+  from = "/privacy"
+  to = "/privacy.html"
+  status = 200
+
+[[redirects]]
+  from = "/terms"
+  to = "/terms.html"
+  status = 200
+
+[[redirects]]
+  from = "/api/send-welcome-email"
+  to = "/.netlify/functions/send-welcome-email"
+  status = 200
+
+[[redirects]]
+  from = "/api/estimate-food"
+  to = "/.netlify/functions/estimate-food"
+  status = 200
+
+[[redirects]]
+  from = "/callback"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/sw.js"
+    [headers.values]
+    Cache-Control = "no-cache"
+    Service-Worker-Allowed = "/"
+
+[[headers]]
+  for = "/manifest.json"
+    [headers.values]
+    Content-Type = "application/manifest+json"
